@@ -21,11 +21,15 @@ Simple API component to make API calls. If the API returns JSON with a header fo
     <div class="lens-container">
 <!--       <div><label class="label">API URL: </label><input is="core-input" value="{{url}}"></div>
  -->
+      <!-- no longer needed
       <div><label class="label">ORG ID: </label><input is="core-input" value="{{orgId}}"></div>
+      -->
 
-      <<div><label class="label">SEARCH: </label><input is="core-input" value="{{nameSearch}}"></div>
+      <!-- committedValue doesn't change until user presses enter or changes focus to another feild. This is useful
+           to avoid calling api with every keystroke --> 
+      <div><label class="label">SEARCH: </label><input is="core-input" id="name_search" committedValue="{{nameSearch}}"></div>
 
-      <<div><label class="label">TYPE: </label><input is="core-input" value="{{idType}}"></div>
+      <div><label class="label">TYPE: </label><input is="core-input" value="{{idType}}"></div>
        
 
 <!--        <div><label class="label">Expect at least <input class="count" is="core-input" value="{{minRows}}"> datapoints.</label></div>
@@ -84,14 +88,20 @@ Simple API component to make API calls. If the API returns JSON with a header fo
        */
       minRows: 1,
 
+      /**
+       * Tells polymer to run nameSearchChanged function when nameSearch variable is changed
+       */
       observe: {
-        minRows: "queryData"
+        nameSearch: "nameSearchChanged"
       },
 
       domReady: function() {
 
           var self = this;
           console.log(self.url);
+
+          //sets the value of nameSearch input feild to nameSearch on initialization
+          this.$.name_search.value = this.nameSearch;
 
           //http://transparencydata.org/api/1.0/entities.json?apikey=51e130ecf0c647f283d488f324b85d44&search=Barack+Obama&type=politician
           self.searchUrl = self._URL + '/entities.json?' + self.apiKey + '&search=' + self.nameSearch + '&type=' + self.idType;
@@ -100,14 +110,15 @@ Simple API component to make API calls. If the API returns JSON with a header fo
           self.lookupId();
 
       }, 
-
+      /**
+       * This function is called when nameSearch is changed (e.g user presses enter in the input box above)
+       */
       nameSearchChanged: function() {
 
+        var self = this;
 
-         //self.searchUrl = self._URL + '/entities.json?' + self.apiKey + '&search=' + self.nameSearch + '&type=' + self.idType;
-          
-
-         //self.lookupId();
+        self.searchUrl = self._URL + '/entities.json?' + self.apiKey + '&search=' + self.nameSearch + '&type=' + self.idType;
+        self.lookupId();
 
       },
 
@@ -144,6 +155,13 @@ Simple API component to make API calls. If the API returns JSON with a header fo
 
       processLookupData: function(data, self) {
         console.log('lookup', data);
+        
+        // return nothing if returned lookup data is empty (e.g. name not found)
+        if(data.length===0) {
+          self.output = {};
+          return;
+        }
+
         var id = data[0].id;
 
           self.url = self._URL + '/aggregates/pol/' + id + '/contributors.json?cycle=' + self.cycle + '&limit=300&' + self.apiKey;
