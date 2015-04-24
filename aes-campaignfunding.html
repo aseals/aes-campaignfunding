@@ -119,7 +119,8 @@ Simple API component to make API calls. If the API returns JSON with a header fo
        * Tells polymer to run nameSearchChanged function when nameSearch variable is changed
        */
       observe: {
-        nameSearch: "nameSearchChanged"
+        nameSearch: "nameSearchChanged",
+        politicianMethods: "nameSearchChanged"
       },
 
       domReady: function() {
