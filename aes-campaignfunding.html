@@ -30,23 +30,34 @@ Simple API component to make API calls. If the API returns JSON with a header fo
 
       <!-- committedValue doesn't change until user presses enter or changes focus to another feild. This is useful
            to avoid calling api with every keystroke --> 
-      <div><label class="label">SEARCH: </label><input is="core-input" id="name_search" committedValue="{{nameSearch}}"></div>
-
-      <!-- <div><label class="label">TYPE: </label><input is="core-input" value="{{idType}}"></div> -->
       <div>
+        <label class="label">CAMPAIGN DATA TYPE: </label><input is="core-input" id="politician_methods" committedValue="{{politicianMethods}}"></div>
+        <br>
+          <li>Top Contributors - "/contributors.json?"</li>
+          <li>Top Industries - "/contributors/industries.json?"</li>
+          <li>Unknown Industries - "/contributors/industries_unknown.json?"</li>
+          <li>Top Sectors - "/contributors/sectors.json?"</li>
+          <li>Local Breakdown - "/contributors/local_breakdown.json?"</li>
+          <li>Contributor Type Breakdown - "/contributors/type_breakdown.json?"</li>
+          <li>FEC Summary - "/fec_summary.json?"</li>
+          <li>FEC Independent Expenditures - "/fec_indexp.json?"</li>
+      </div> 
+      <br>
+      <div><label class="label">POLITICIAN SEARCH: </label><input is="core-input" id="name_search" committedValue="{{nameSearch}}"></div>
+      <!-- <div><label class="label">TYPE: </label><input is="core-input" value="{{idType}}"></div> -->
+<!--       <div>
         <label class="label">Politician Methods: </label>
-        <core-menu selected="0" selectedItem="{{selectedMenu}}" selectedMenu.id="{{politicianMethods}}">
+        <core-menu selected="0" selectedItem="{{selectedMenu}}">
           <core-item label="Top Contributors" id="'/contributors.json?'"></core-item>
           <core-item label="Dialog"></core-item>
           <core-item label="Search"></core-item>
         </core-menu>
-        This is the selected item: {{selectedMenu.id}}
+        This is the selected item: {{selectedMenu.id}} -->
         <!-- This is the selected item: {{selectedMenu.id}}
         selectedItem="{{selectedMenu}}" -->
-
-      </div> 
 <!--        <div><label class="label">Expect at least <input class="count" is="core-input" value="{{minRows}}"> datapoints.</label></div>
  -->
+  <br>
       <div><label class="label">Num Records: </label><div class="data">{{output.length}}</div></div>
     </div>
 
@@ -180,10 +191,10 @@ Simple API component to make API calls. If the API returns JSON with a header fo
 
         var id = data[0].id;
 
-          self.url = self._URL + '/aggregates/pol/' + id + '/contributors.json?' + '&limit=300&' + self.apiKey;
+          self.url = self._URL + '/aggregates/pol/' + id + self.politicianMethods + '&' + self.apiKey;
           console.log(self.url);
 
-          //removed cycle=' + self.cycle from after '/contributors.json?
+          //removed cycle=' + self.cycle from after '/contributors.json?''
 
           self.queryData();
 
