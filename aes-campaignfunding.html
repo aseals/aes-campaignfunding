@@ -1,5 +1,8 @@
 <link rel="import" href="../polymer/polymer.html"> 
-<link rel="import" href="../core-input/core-input.html"> 
+<link rel="import" href="../core-input/core-input.html">
+<link rel="import" href="../core-selector/core-selector.html">
+<link rel="import" href="../core-menu/core-menu.html"> 
+<link rel="import" href="../core-item/core-item.html">
 
 
 <!--
@@ -29,13 +32,24 @@ Simple API component to make API calls. If the API returns JSON with a header fo
            to avoid calling api with every keystroke --> 
       <div><label class="label">SEARCH: </label><input is="core-input" id="name_search" committedValue="{{nameSearch}}"></div>
 
-      <div><label class="label">TYPE: </label><input is="core-input" value="{{idType}}"></div>
-       
+      <!-- <div><label class="label">TYPE: </label><input is="core-input" value="{{idType}}"></div> -->
+      <div>
+        <label class="label">Politician Methods: </label>
+        <core-menu selected="0" selectedItem="{{selectedMenu}}" selectedMenu.id="{{politicianMethods}}">
+          <core-item label="Top Contributors" id="'/contributors.json?'"></core-item>
+          <core-item label="Dialog"></core-item>
+          <core-item label="Search"></core-item>
+        </core-menu>
+        This is the selected item: {{selectedMenu.id}}
+        <!-- This is the selected item: {{selectedMenu.id}}
+        selectedItem="{{selectedMenu}}" -->
 
+      </div> 
 <!--        <div><label class="label">Expect at least <input class="count" is="core-input" value="{{minRows}}"> datapoints.</label></div>
  -->
       <div><label class="label">Num Records: </label><div class="data">{{output.length}}</div></div>
     </div>
+
     
   </template>
   <script>
@@ -72,13 +86,15 @@ Simple API component to make API calls. If the API returns JSON with a header fo
      // _URL: 'http://makelenses.com:8000/transparencydata.com/api/1.0/aggregates/org/',  
       _URL: 'http://makelenses.com:8000/transparencydata.com/api/1.0',
 
-      orgId: '1b8fea7e453d4e75841eac48ff9df550',
+      orgId: '', //1b8fea7e453d4e75841eac48ff9df550
 
       //search
 
-      nameSearch: 'Barack Obama',
+      nameSearch: '', //Barack Obama
 
-      idType: 'politician',
+      idType: '', //politician
+
+      politicianMethods: '',
 
 
 
@@ -104,8 +120,7 @@ Simple API component to make API calls. If the API returns JSON with a header fo
           this.$.name_search.value = this.nameSearch;
 
           //http://transparencydata.org/api/1.0/entities.json?apikey=51e130ecf0c647f283d488f324b85d44&search=Barack+Obama&type=politician
-          self.searchUrl = self._URL + '/entities.json?' + self.apiKey + '&search=' + self.nameSearch + '&type=' + self.idType;
-          
+          self.searchUrl = self._URL + '/entities.json?' + self.apiKey + '&search=' + self.nameSearch + '&type=' + self.idType;       
 
           self.lookupId();
 
@@ -119,6 +134,7 @@ Simple API component to make API calls. If the API returns JSON with a header fo
 
         self.searchUrl = self._URL + '/entities.json?' + self.apiKey + '&search=' + self.nameSearch + '&type=' + self.idType;
         self.lookupId();
+
 
       },
 
@@ -164,12 +180,15 @@ Simple API component to make API calls. If the API returns JSON with a header fo
 
         var id = data[0].id;
 
-          self.url = self._URL + '/aggregates/pol/' + id + '/contributors.json?cycle=' + self.cycle + '&limit=300&' + self.apiKey;
+          self.url = self._URL + '/aggregates/pol/' + id + '/contributors.json?' + '&limit=300&' + self.apiKey;
           console.log(self.url);
+
+          //removed cycle=' + self.cycle from after '/contributors.json?
 
           self.queryData();
 
       },
+
 
 
       processQueryData: function(data, self) {
