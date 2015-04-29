@@ -31,17 +31,26 @@ Simple API component to make API calls. If the API returns JSON with a header fo
       <!-- committedValue doesn't change until user presses enter or changes focus to another feild. This is useful
            to avoid calling api with every keystroke --> 
       <div>
-        <label class="label">CAMPAIGN DATA TYPE: </label><input is="core-input" id="politician_methods" committedValue="{{politicianMethods}}"></div>
-        <br>
-          <li>Top Contributors - "/contributors.json?"</li>
-          <li>Top Industries - "/contributors/industries.json?"</li>
-          <li>Unknown Industries - "/contributors/industries_unknown.json?"</li>
-          <li>Top Sectors - "/contributors/sectors.json?"</li>
-          <li>Local Breakdown - "/contributors/local_breakdown.json?"</li>
-          <li>Contributor Type Breakdown - "/contributors/type_breakdown.json?"</li>
-          <li>FEC Summary - "/fec_summary.json?"</li>
-          <li>FEC Independent Expenditures - "/fec_indexp.json?"</li>
-      </div> 
+        <label class="label">CAMPAIGN DATA TYPE: </label>
+
+<!--         <input is="core-input" id="politician_methods" committedValue="{{politicianMethods}}">
+ -->
+
+        <!--
+          The template/repeat tag iterates over politicianMethodOptions array and renders them as a options for core-selector.
+          'title' of each poriticianMethodOptions is used to be displayed in the selector and 'url' is pased to politicianMethods variable when selected 
+        -->
+        <core-selector class="selector" selected="{{politicianMethods}}" valueattr="label" multi="false">
+          <template repeat="{{method in politicianMethodOptions}}">
+            <div class="col" label="{{method.url}}">{{method.title}}</div>
+
+          </template>
+
+        </core-selector>
+
+
+      </div>
+
       <br>
       <div><label class="label">POLITICIAN SEARCH: </label><input is="core-input" id="name_search" committedValue="{{nameSearch}}"></div>
       <!-- <div><label class="label">TYPE: </label><input is="core-input" value="{{idType}}"></div> -->
@@ -106,6 +115,21 @@ Simple API component to make API calls. If the API returns JSON with a header fo
       idType: '', //politician
 
       politicianMethods: '',
+
+      /**
+       * Different json endpoints supported by api.
+       */
+      politicianMethodOptions: [ 
+          {title: "Top Contributors", url: "/contributors.json?"},
+          {title: "Top Industries", url: "/contributors/industries.json?"},
+          {title: "Unknown Industries", url: "/contributors/industries_unknown.json?"},
+          {title: "Top Sectors", url: "/contributors/sectors.json?"},
+          {title: "Local Breakdown", url: "/contributors/local_breakdown.json?"},
+          {title: "Contributor Type Breakdown", url: "/contributors/type_breakdown.json?"},
+          {title: "FEC Summary", url: "/fec_summary.json?"},
+          {title: "FEC Independent Expenditures", url: "/fec_indexp.json?"}
+      ],
+
 
 
 
