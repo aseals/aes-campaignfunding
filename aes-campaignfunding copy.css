@@ -1,0 +1,43 @@
+:host {
+  display: inline-block;
+  color: black;
+  width: 300px;
+  height: 300px;
+  font-family: sans-serif;
+  font-size: 12px;
+
+}
+
+.selector {
+  min-height: 10px;
+  display: inline-block;
+  max-height: 123px;
+  overflow-y: scroll; 
+}
+
+.selector .col {
+  padding: 1px;
+  border: 1px solid #EEE;
+}
+.selector .core-selected {
+  background-color: #ccc;
+
+}
+.label {
+  display: block;
+  color: #2fa3af;
+}
+
+.data {
+	max-height: 50px;
+	overflow: hidden;
+}
+
+.count {
+	width: 2.5em !important;
+}
+
+
+html /deep/ input[is=core-input] {
+	border: 1px solid #eee !important;
+}
